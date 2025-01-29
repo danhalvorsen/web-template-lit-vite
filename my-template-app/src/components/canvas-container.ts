@@ -1,13 +1,24 @@
 import { LitElement, css, html } from 'lit'
 import { customElement, property } from 'lit/decorators.js'
 import * as THREE from 'three';
+
 @customElement('canvas-container')
 export class CanvasContainer extends LitElement {
   @property({ type: Array }) shapes: {
     name: string;
     points: { x: number; y: number }[];
     transform?: THREE.Matrix4;
-  }[] = [];
+  }[] = [
+    // Default shape (a simple triangle)
+    {
+      name: 'Default Triangle',
+      points: [
+        { x: -1, y: -1 },
+        { x: 1, y: -1 },
+        { x: 0, y: 1 },
+      ],
+    },
+  ];
 
   private scene!: THREE.Scene;
   private camera!: THREE.PerspectiveCamera;
@@ -38,7 +49,7 @@ export class CanvasContainer extends LitElement {
       0.1,
       1000
     );
-    this.camera.position.z = 10;
+    this.camera.position.z = 5;
 
     this.renderer = new THREE.WebGLRenderer({ canvas });
     this.renderer.setSize(this.offsetWidth, this.offsetHeight);
@@ -92,6 +103,6 @@ export class CanvasContainer extends LitElement {
   }
 
   render() {
-    return html`<canvas></canvas>`;
+    return html`<canvas></canvas><div><slot></slot></div>`;
   }
 }
